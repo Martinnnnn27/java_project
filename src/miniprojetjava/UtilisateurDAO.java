@@ -11,14 +11,14 @@ import java.sql.SQLException;
 
 public class UtilisateurDAO {
 
-    public boolean authentifier(String login, String motDePasse) {
-        String sql = "SELECT * FROM utilisateur WHERE login = ? AND mot_de_passe = ?";
+    public boolean authentifier(String login, String password) {
+        String sql = "SELECT * FROM utilisateur WHERE login = ? AND password = ?";
         
         try (Connection con = ConnexionBDD.getConnection();
              PreparedStatement pst = con.prepareStatement(sql)) {
             
             pst.setString(1, login);
-            pst.setString(2, motDePasse);
+            pst.setString(2, password);
             
             try (ResultSet rs = pst.executeQuery()) {
                 return rs.next(); // Retourne true si un utilisateur correspond
