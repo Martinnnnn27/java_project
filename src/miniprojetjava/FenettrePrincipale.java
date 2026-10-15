@@ -17,7 +17,9 @@ public class FenettrePrincipale extends javax.swing.JFrame {
      * Creates new form FenettrePrincipale
      */
     public FenettrePrincipale() {
+// 1. Initialiser d'abord tous les composants de NetBeans
         initComponents();
+<<<<<<< HEAD
         btnEnregistrer.setText("Enregistrer");
 
         javax.swing.JButton btnStats = new javax.swing.JButton("Statistiques");
@@ -45,6 +47,25 @@ public class FenettrePrincipale extends javax.swing.JFrame {
         menuBar.add(menuAffichage);
         setJMenuBar(menuBar);
 
+=======
+
+        // 2. Créer le panneau avec l'image de fond
+        BackgroundPanel bg = new BackgroundPanel("/miniprojetjava/fond_parc.jpg");
+        bg.setLayout(new java.awt.BorderLayout());
+
+        // 3. Récupérer le conteneur principal de la fenêtre et le rendre transparent
+        java.awt.Container mainContent = getContentPane();
+        if (mainContent instanceof javax.swing.JComponent) {
+            ((javax.swing.JComponent) mainContent).setOpaque(false);
+        }
+
+        // 4. Placer le panneau d'origine par-dessus l'image de fond
+        bg.add(mainContent, java.awt.BorderLayout.CENTER);
+        setContentPane(bg);
+
+        // 5. Styliser et charger
+        styliserBoutons();
+>>>>>>> fc11db7 (fond d'ecran)
         chargerTableau();
         
     }
@@ -69,6 +90,8 @@ public class FenettrePrincipale extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         tableEntrees = new javax.swing.JTable();
         btnsupprimr = new javax.swing.JButton();
+        btnStats = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -84,6 +107,7 @@ public class FenettrePrincipale extends javax.swing.JFrame {
         jScrollPane3.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
 
         jScrollPane1.setViewportView(txtNomVisiteur);
 
@@ -109,43 +133,66 @@ public class FenettrePrincipale extends javax.swing.JFrame {
         btnsupprimr.setText("Supprimer");
         btnsupprimr.addActionListener(this::btnsupprimrActionPerformed);
 
+        btnStats.setText("Statistiques");
+        btnStats.addActionListener(this::btnStatsActionPerformed);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Gestion du Parc d'Attractions");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(comboTypeBillet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 819, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(324, 324, 324)
+                .addComponent(btnStats)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnsupprimr)
                 .addGap(65, 65, 65))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(9, 9, 9)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(comboTypeBillet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(42, 42, 42)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 703, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(274, 274, 274)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(226, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(76, 76, 76)
                 .addComponent(comboTypeBillet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
+                .addGap(59, 59, 59)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 290, Short.MAX_VALUE)
+                .addGap(72, 72, 72)
                 .addComponent(btnEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(55, 55, 55))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnsupprimr)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(20, 20, 20)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(68, 68, 68)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnsupprimr)
+                    .addComponent(btnStats))
+                .addGap(0, 25, Short.MAX_VALUE))
         );
 
         pack();
@@ -236,6 +283,10 @@ int ligneSelectionnee = tableEntrees.getSelectedRow();
     }
     }//GEN-LAST:event_btnsupprimrActionPerformed
 
+    private void btnStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStatsActionPerformed
+        new FenettreStats().setVisible(true);
+    }//GEN-LAST:event_btnStatsActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -286,14 +337,58 @@ int ligneSelectionnee = tableEntrees.getSelectedRow();
     } catch (java.sql.SQLException e) {
         e.printStackTrace();
     }
-}
+}private void styliserBoutons() {
+        if (btnEnregistrer != null) {
+            btnEnregistrer.setBackground(new java.awt.Color(40, 167, 69));
+            btnEnregistrer.setForeground(java.awt.Color.WHITE);
+            btnEnregistrer.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+        }
+        if (btnStats != null) {
+            btnStats.setBackground(new java.awt.Color(0, 123, 255));
+            btnStats.setForeground(java.awt.Color.WHITE);
+            btnStats.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+        }
+        if (btnsupprimr != null) {
+            btnsupprimr.setBackground(new java.awt.Color(220, 53, 69));
+            btnsupprimr.setForeground(java.awt.Color.WHITE);
+            btnsupprimr.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+        }
+    }
+    
+    
+    
+    
+    
+    
+// Classe interne pour gérer l'image de fond redimensionnable
+    class BackgroundPanel extends javax.swing.JPanel {
+        private java.awt.Image image;
+
+        public BackgroundPanel(String path) {
+            try {
+                image = javax.imageio.ImageIO.read(getClass().getResource(path));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected void paintComponent(java.awt.Graphics g) {
+            super.paintComponent(g);
+            if (image != null) {
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+        }
+    }
     
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnregistrer;
+    private javax.swing.JButton btnStats;
     private javax.swing.JButton btnsupprimr;
     private javax.swing.JComboBox<String> comboTypeBillet;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -304,3 +399,4 @@ int ligneSelectionnee = tableEntrees.getSelectedRow();
     private javax.swing.JTextPane txtPrix;
     // End of variables declaration//GEN-END:variables
 }
+
