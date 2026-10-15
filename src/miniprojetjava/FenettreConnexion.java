@@ -35,7 +35,7 @@ public class FenettreConnexion extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtLogin = new javax.swing.JTextField();
         btnConnexion = new javax.swing.JButton();
-        txtPassword = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -97,7 +97,7 @@ public class FenettreConnexion extends javax.swing.JFrame {
     private void btnConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnexionActionPerformed
         // TODO add your handling code here:
         String login = txtLogin.getText();
-String mdp = txtPassword.getText();
+        String mdp = new String(txtPassword.getPassword());
 
 if (login.isEmpty() || mdp.isEmpty()) {
     javax.swing.JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs.");
@@ -151,6 +151,6 @@ if (valide) {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField txtLogin;
-    private javax.swing.JTextField txtPassword;
+    private javax.swing.JPasswordField txtPassword;
     // End of variables declaration//GEN-END:variables
 }
