@@ -17,17 +17,13 @@ public class FenettrePrincipale extends javax.swing.JFrame {
      * Creates new form FenettrePrincipale
      */
     public FenettrePrincipale() {
-// 1. Initialiser d'abord tous les composants de NetBeans
+
+        // 1. Initialiser les composants
         initComponents();
-<<<<<<< HEAD
+
         btnEnregistrer.setText("Enregistrer");
 
-        javax.swing.JButton btnStats = new javax.swing.JButton("Statistiques");
-        btnStats.setBounds(21, 260, 119, 26);
-        btnStats.addActionListener(e -> new FenettreStats().setVisible(true));
-        getContentPane().add(btnStats);
-
-        // Barre de menus
+        // Barre de menus (ajoutée par Alexis)
         javax.swing.JMenuBar menuBar = new javax.swing.JMenuBar();
 
         javax.swing.JMenu menuFichier = new javax.swing.JMenu("Fichier");
@@ -47,27 +43,22 @@ public class FenettrePrincipale extends javax.swing.JFrame {
         menuBar.add(menuAffichage);
         setJMenuBar(menuBar);
 
-=======
-
-        // 2. Créer le panneau avec l'image de fond
+        // 2. Gestion du fond d'écran et superposition
         BackgroundPanel bg = new BackgroundPanel("/miniprojetjava/fond_parc.jpg");
         bg.setLayout(new java.awt.BorderLayout());
 
-        // 3. Récupérer le conteneur principal de la fenêtre et le rendre transparent
         java.awt.Container mainContent = getContentPane();
         if (mainContent instanceof javax.swing.JComponent) {
             ((javax.swing.JComponent) mainContent).setOpaque(false);
         }
 
-        // 4. Placer le panneau d'origine par-dessus l'image de fond
         bg.add(mainContent, java.awt.BorderLayout.CENTER);
         setContentPane(bg);
 
-        // 5. Styliser et charger
+        // 3. Styliser et charger
         styliserBoutons();
->>>>>>> fc11db7 (fond d'ecran)
         chargerTableau();
-        
+    
     }
 
     /**
@@ -360,15 +351,19 @@ int ligneSelectionnee = tableEntrees.getSelectedRow();
     
     
     
-// Classe interne pour gérer l'image de fond redimensionnable
-    class BackgroundPanel extends javax.swing.JPanel {
+class BackgroundPanel extends javax.swing.JPanel {
         private java.awt.Image image;
 
         public BackgroundPanel(String path) {
             try {
-                image = javax.imageio.ImageIO.read(getClass().getResource(path));
+                java.net.URL imgURL = getClass().getResource(path);
+                if (imgURL != null) {
+                    image = javax.imageio.ImageIO.read(imgURL);
+                } else {
+                    image = javax.imageio.ImageIO.read(new java.io.File("src/miniprojetjava/fond_parc.jpg"));
+                }
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Erreur image : " + e.getMessage());
             }
         }
 
