@@ -54,11 +54,73 @@ public class FenettrePrincipale extends javax.swing.JFrame {
 
         bg.add(mainContent, java.awt.BorderLayout.CENTER);
         setContentPane(bg);
+        
+        tableEntrees.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableEntreesMouseClicked(evt);
+            }
+        });
 
         // 3. Styliser et charger
         styliserBoutons();
         chargerTableau();
     
+    }
+    
+    private void tableEntreesMouseClicked(java.awt.event.MouseEvent evt) {
+        int ligne = tableEntrees.getSelectedRow();
+        if (ligne != -1) {
+            txtNomVisiteur.setText(tableEntrees.getValueAt(ligne, 1).toString());
+            comboTypeBillet.setSelectedItem(tableEntrees.getValueAt(ligne, 3).toString());
+            txtPrix.setText(tableEntrees.getValueAt(ligne, 5).toString());
+        }
+    }
+    
+    private void btnModifierActionPerformed(java.awt.event.ActionEvent evt) {
+        int ligne = tableEntrees.getSelectedRow();
+        if (ligne == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Veuillez sélectionner une ligne dans le tableau à modifier.");
+            return;
+        }
+
+        int id = Integer.parseInt(tableEntrees.getValueAt(ligne, 0).toString());
+        String nom = txtNomVisiteur.getText().trim();
+        String type = comboTypeBillet.getSelectedItem().toString();
+        String prixText = txtPrix.getText().trim();
+
+        if (nom.isEmpty() || prixText.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs.");
+            return;
+        }
+
+        try {
+            double prix = Double.parseDouble(prixText);
+            String sql = "UPDATE entree_parc SET nom_visiteur = ?, type_pass = ?, prix = ? WHERE id = ?";
+
+            try (java.sql.Connection conn = ConnexionBDD.getConnection();
+                 java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                stmt.setString(1, nom);
+                stmt.setString(2, type);
+                stmt.setDouble(3, prix);
+                stmt.setInt(4, id);
+
+                int lignes = stmt.executeUpdate();
+                if (lignes > 0) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Entrée modifiée avec succès !");
+                    txtNomVisiteur.setText("");
+                    txtPrix.setText("");
+                    chargerTableau();
+                }
+
+            } catch (java.sql.SQLException e) {
+                e.printStackTrace();
+                javax.swing.JOptionPane.showMessageDialog(this, "Erreur BDD : " + e.getMessage());
+            }
+
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Prix invalide.", "Erreur", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -83,6 +145,10 @@ public class FenettrePrincipale extends javax.swing.JFrame {
         btnsupprimr = new javax.swing.JButton();
         btnStats = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        btnModifier = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -102,7 +168,7 @@ public class FenettrePrincipale extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(txtNomVisiteur);
 
-        comboTypeBillet.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Adulte", "Pass Journée", "Enfant", "VIP" }));
+        comboTypeBillet.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Adulte", "Enfant", "VIP" }));
 
         jScrollPane2.setViewportView(txtPrix);
 
@@ -131,59 +197,78 @@ public class FenettrePrincipale extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Gestion du Parc d'Attractions");
 
+        jLabel2.setText("Nom du visiteur");
+
+        jLabel3.setText("Type de billets");
+
+        jLabel4.setText("Prix (€)");
+
+        btnModifier.setText("Modifier");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(324, 324, 324)
-                .addComponent(btnStats)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnsupprimr)
-                .addGap(65, 65, 65))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(21, 21, 21)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGap(114, 114, 114))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(comboTypeBillet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(61, 61, 61)))
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 703, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(274, 274, 274)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(9, 9, 9)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(comboTypeBillet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(42, 42, 42)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 703, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(274, 274, 274)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(226, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(btnStats)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnModifier, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnsupprimr)))
+                .addContainerGap(207, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(76, 76, 76)
-                .addComponent(comboTypeBillet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(72, 72, 72)
-                .addComponent(btnEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(68, 68, 68)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(comboTypeBillet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(btnEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnModifier)
                     .addComponent(btnsupprimr)
                     .addComponent(btnStats))
-                .addGap(0, 25, Short.MAX_VALUE))
+                .addGap(38, 38, 38))
         );
 
         pack();
@@ -329,7 +414,7 @@ int ligneSelectionnee = tableEntrees.getSelectedRow();
         e.printStackTrace();
     }
 }private void styliserBoutons() {
-        if (btnEnregistrer != null) {
+       if (btnEnregistrer != null) {
             btnEnregistrer.setBackground(new java.awt.Color(40, 167, 69));
             btnEnregistrer.setForeground(java.awt.Color.WHITE);
             btnEnregistrer.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
@@ -343,6 +428,11 @@ int ligneSelectionnee = tableEntrees.getSelectedRow();
             btnsupprimr.setBackground(new java.awt.Color(220, 53, 69));
             btnsupprimr.setForeground(java.awt.Color.WHITE);
             btnsupprimr.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+        }
+        if (btnModifier != null) {
+            btnModifier.setBackground(new java.awt.Color(255, 193, 7)); // Couleur orange/jaune
+            btnModifier.setForeground(java.awt.Color.BLACK);
+            btnModifier.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
         }
     }
     
@@ -380,10 +470,14 @@ class BackgroundPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnregistrer;
+    private javax.swing.JButton btnModifier;
     private javax.swing.JButton btnStats;
     private javax.swing.JButton btnsupprimr;
     private javax.swing.JComboBox<String> comboTypeBillet;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
