@@ -18,6 +18,33 @@ public class FenettrePrincipale extends javax.swing.JFrame {
      */
     public FenettrePrincipale() {
         initComponents();
+        btnEnregistrer.setText("Enregistrer");
+
+        javax.swing.JButton btnStats = new javax.swing.JButton("Statistiques");
+        btnStats.setBounds(21, 260, 119, 26);
+        btnStats.addActionListener(e -> new FenettreStats().setVisible(true));
+        getContentPane().add(btnStats);
+
+        // Barre de menus
+        javax.swing.JMenuBar menuBar = new javax.swing.JMenuBar();
+
+        javax.swing.JMenu menuFichier = new javax.swing.JMenu("Fichier");
+        javax.swing.JMenuItem itemActualiser = new javax.swing.JMenuItem("Actualiser");
+        itemActualiser.addActionListener(e -> chargerTableau());
+        javax.swing.JMenuItem itemQuitter = new javax.swing.JMenuItem("Quitter");
+        itemQuitter.addActionListener(e -> System.exit(0));
+        menuFichier.add(itemActualiser);
+        menuFichier.addSeparator();
+        menuFichier.add(itemQuitter);
+
+        javax.swing.JMenu menuAffichage = new javax.swing.JMenu("Affichage");
+        javax.swing.JCheckBoxMenuItem chkMode = new javax.swing.JCheckBoxMenuItem("Mode compact");
+        menuAffichage.add(chkMode);
+
+        menuBar.add(menuFichier);
+        menuBar.add(menuAffichage);
+        setJMenuBar(menuBar);
+
         chargerTableau();
         
     }
@@ -60,7 +87,7 @@ public class FenettrePrincipale extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(txtNomVisiteur);
 
-        comboTypeBillet.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Adulte", "Enfant", "VIP" }));
+        comboTypeBillet.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Adulte", "Pass Journée", "Enfant", "VIP" }));
 
         jScrollPane2.setViewportView(txtPrix);
 

@@ -1,27 +1,33 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package miniprojetjava;
 
 import java.util.Date;
 
-public class EntreeParc {
+public class EntreeParc extends Personne {
     private int id;
-    private String nomVisiteur;
     private String typeBillet;
     private double prix;
     private Date dateEntree;
 
     // Constructeur vide
     public EntreeParc() {
+        super();
     }
 
-    // Constructeur avec paramètres
+    // Constructeur principal
     public EntreeParc(String nomVisiteur, String typeBillet, double prix) {
-        this.nomVisiteur = nomVisiteur;
+        super(nomVisiteur);
         this.typeBillet = typeBillet;
         this.prix = prix;
+        this.dateEntree = new Date();
+    }
+
+    // Constructeur complet avec ID et Date (utile pour le DAO / affichage)
+    public EntreeParc(int id, String nomVisiteur, String typeBillet, double prix, Date dateEntree) {
+        super(nomVisiteur);
+        this.id = id;
+        this.typeBillet = typeBillet;
+        this.prix = prix;
+        this.dateEntree = dateEntree;
     }
 
     // Getters et Setters
@@ -33,12 +39,13 @@ public class EntreeParc {
         this.id = id;
     }
 
+    // Méthodes pour compatibilité avec le code de ton collègue
     public String getNomVisiteur() {
-        return nomVisiteur;
+        return this.nom;
     }
 
     public void setNomVisiteur(String nomVisiteur) {
-        this.nomVisiteur = nomVisiteur;
+        this.nom = nomVisiteur;
     }
 
     public String getTypeBillet() {
