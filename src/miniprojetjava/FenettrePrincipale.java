@@ -37,7 +37,38 @@ public class FenettrePrincipale extends javax.swing.JFrame {
 
         javax.swing.JMenu menuAffichage = new javax.swing.JMenu("Affichage");
         javax.swing.JCheckBoxMenuItem chkMode = new javax.swing.JCheckBoxMenuItem("Mode compact");
+        chkMode.addActionListener(e -> {
+            boolean compact = chkMode.isSelected();
+
+            if (compact) {
+                // Réduit la hauteur des lignes du tableau pour afficher plus de données
+                tableEntrees.setRowHeight(18);
+                // Réduit la taille de la police du tableau
+                tableEntrees.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 11));
+            } else {
+                // Rétablit la hauteur standard des lignes
+                tableEntrees.setRowHeight(24);
+                // Rétablit la police standard
+                tableEntrees.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12));
+            }
+
+            tableEntrees.revalidate();
+            tableEntrees.repaint();
+        });
         menuAffichage.add(chkMode);
+
+        javax.swing.JMenuItem itemCouleur = new javax.swing.JMenuItem("Changer la couleur de fond");
+        itemCouleur.addActionListener(e -> {
+            java.awt.Color couleur = javax.swing.JColorChooser.showDialog(
+                    this,
+                    "Choisir une couleur d'arrière-plan",
+                    getContentPane().getBackground()
+            );
+            if (couleur != null) {
+                getContentPane().setBackground(couleur);
+            }
+        });
+        menuAffichage.add(itemCouleur);
 
         menuBar.add(menuFichier);
         menuBar.add(menuAffichage);
@@ -61,7 +92,29 @@ public class FenettrePrincipale extends javax.swing.JFrame {
             }
         });
 
-        // 3. Styliser et charger
+        javax.swing.JMenuItem itemRecherche = new javax.swing.JMenuItem("Rechercher un visiteur");
+        itemRecherche.addActionListener(e -> {
+            String nom = javax.swing.JOptionPane.showInputDialog(this, "Entrez le nom du visiteur à surligner :");
+            if (nom != null && !nom.trim().isEmpty()) {
+                boolean trouve = false;
+                for (int i = 0; i < tableEntrees.getRowCount(); i++) {
+                    Object val = tableEntrees.getValueAt(i, 1); // Colonne 1 = Nom
+                    if (val != null && val.toString().equalsIgnoreCase(nom.trim())) {
+                        tableEntrees.setRowSelectionInterval(i, i);
+                        trouve = true;
+                        break;
+                    }
+                }
+                if (!trouve) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Aucun visiteur trouvé avec ce nom.");
+                }
+            }
+        });
+        menuFichier.add(itemRecherche);
+
+        btnModifier.addActionListener(this::btnModifierActionPerformed);
+        
+        // Styliser et charger
         styliserBoutons();
         chargerTableau();
     
