@@ -18,6 +18,8 @@ public class FenettrePrincipale extends javax.swing.JFrame {
      */
     public FenettrePrincipale() {
         initComponents();
+        chargerTableau();
+        
     }
 
     /**
@@ -29,12 +31,30 @@ public class FenettrePrincipale extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtNomVisiteur = new javax.swing.JTextPane();
         comboTypeBillet = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtPrix = new javax.swing.JTextPane();
         btnEnregistrer = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tableEntrees = new javax.swing.JTable();
+        btnsupprimr = new javax.swing.JButton();
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,18 +66,40 @@ public class FenettrePrincipale extends javax.swing.JFrame {
 
         btnEnregistrer.addActionListener(this::btnEnregistrerActionPerformed);
 
+        tableEntrees.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(tableEntrees);
+
+        btnsupprimr.setText("Supprimer");
+        btnsupprimr.addActionListener(this::btnsupprimrActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(comboTypeBillet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(207, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 819, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnsupprimr)
+                .addGap(65, 65, 65))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -68,9 +110,15 @@ public class FenettrePrincipale extends javax.swing.JFrame {
                 .addComponent(comboTypeBillet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 290, Short.MAX_VALUE)
                 .addComponent(btnEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(55, 55, 55))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnsupprimr)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -108,6 +156,7 @@ public class FenettrePrincipale extends javax.swing.JFrame {
                 javax.swing.JOptionPane.showMessageDialog(this, "Entrée enregistrée avec succès !");
                 txtNomVisiteur.setText("");
                 txtPrix.setText("");
+                chargerTableau();
             } else {
                 javax.swing.JOptionPane.showMessageDialog(this, "Erreur lors de l'enregistrement.", "Erreur", javax.swing.JOptionPane.ERROR_MESSAGE);
             }
@@ -122,6 +171,43 @@ public class FenettrePrincipale extends javax.swing.JFrame {
     }
 
     }//GEN-LAST:event_btnEnregistrerActionPerformed
+
+    private void btnsupprimrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsupprimrActionPerformed
+int ligneSelectionnee = tableEntrees.getSelectedRow();
+    
+    if (ligneSelectionnee == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Veuillez sélectionner une ligne dans le tableau.");
+        return;
+    }
+
+    // Récupère l'ID dans la première colonne (colonne 0)
+    int id = Integer.parseInt(tableEntrees.getValueAt(ligneSelectionnee, 0).toString());
+
+    int confirmation = javax.swing.JOptionPane.showConfirmDialog(
+        this, 
+        "Voulez-vous vraiment supprimer cette entrée ?", 
+        "Confirmation", 
+        javax.swing.JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirmation == javax.swing.JOptionPane.YES_OPTION) {
+        String sql = "DELETE FROM entree_parc WHERE id = ?";
+
+        try (java.sql.Connection conn = ConnexionBDD.getConnection();
+             java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Entrée supprimée !");
+            chargerTableau(); // Rafraîchit le tableau directement
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(this, "Erreur BDD : " + e.getMessage());
+        }
+    }
+    }//GEN-LAST:event_btnsupprimrActionPerformed
 
     /**
      * @param args the command line arguments
@@ -147,12 +233,46 @@ public class FenettrePrincipale extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FenettrePrincipale().setVisible(true));
     }
+    public void chargerTableau() {
+    javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
+        new String[]{"ID", "Nom", "Prénom", "Type Pass", "Zone", "Prix"}, 0
+    );
+
+    String sql = "SELECT * FROM entree_parc";
+
+    try (java.sql.Connection conn = ConnexionBDD.getConnection();
+         java.sql.Statement stmt = conn.createStatement();
+         java.sql.ResultSet rs = stmt.executeQuery(sql)) {
+
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getInt("id"),
+                rs.getString("nom_visiteur"),
+                rs.getString("prenom_visiteur"),
+                rs.getString("type_pass"),
+                rs.getString("zone_attraction"),
+                rs.getDouble("prix")
+            });
+        }
+        tableEntrees.setModel(model);
+
+    } catch (java.sql.SQLException e) {
+        e.printStackTrace();
+    }
+}
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnregistrer;
+    private javax.swing.JButton btnsupprimr;
     private javax.swing.JComboBox<String> comboTypeBillet;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tableEntrees;
     private javax.swing.JTextPane txtNomVisiteur;
     private javax.swing.JTextPane txtPrix;
     // End of variables declaration//GEN-END:variables
