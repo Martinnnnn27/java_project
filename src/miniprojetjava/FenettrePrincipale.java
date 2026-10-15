@@ -91,14 +91,16 @@ public class FenettrePrincipale extends javax.swing.JFrame {
         double prix = Double.parseDouble(prixText);
 
         // Requête SQL directe vers MySQL
-        String sql = "INSERT INTO entree_parc (nom_visiteur, type_billet, prix, date_entree) VALUES (?, ?, ?, NOW())";
+        String sql = "INSERT INTO entree_parc (nom_visiteur, prenom_visiteur, type_pass, zone_attraction, prix) VALUES (?, ?, ?, ?, ?)";
 
         try (java.sql.Connection conn = ConnexionBDD.getConnection();
              java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, nom);
-            stmt.setString(2, type);
-            stmt.setDouble(3, prix);
+            stmt.setString(2, "Visiteur");
+            stmt.setString(3, type);
+            stmt.setString(4, "Zone Principale");
+            stmt.setDouble(5, prix);
 
             int lignes = stmt.executeUpdate();
 
