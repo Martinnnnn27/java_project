@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class EntreeParc extends Personne {
     private int id;
+    private String prenomVisiteur;
     private String typeBillet;
     private double prix;
     private Date dateEntree;
@@ -13,18 +14,25 @@ public class EntreeParc extends Personne {
         super();
     }
 
-    // Constructeur principal
-    public EntreeParc(String nomVisiteur, String typeBillet, double prix) {
+    // Constructeur principal pour l'ajout (avec nom, prénom, type, prix)
+    public EntreeParc(String nomVisiteur, String prenomVisiteur, String typeBillet, double prix) {
         super(nomVisiteur);
+        this.prenomVisiteur = prenomVisiteur;
         this.typeBillet = typeBillet;
         this.prix = prix;
         this.dateEntree = new Date();
     }
 
-    // Constructeur complet avec ID et Date (utile pour le DAO / affichage)
-    public EntreeParc(int id, String nomVisiteur, String typeBillet, double prix, Date dateEntree) {
+    // Constructeur pour rétrocompatibilité à 3 paramètres (définit prénom à "Visiteur")
+    public EntreeParc(String nomVisiteur, String typeBillet, double prix) {
+        this(nomVisiteur, "Visiteur", typeBillet, prix);
+    }
+
+    // Constructeur complet (utile pour charger depuis la BDD / DAO)
+    public EntreeParc(int id, String nomVisiteur, String prenomVisiteur, String typeBillet, double prix, Date dateEntree) {
         super(nomVisiteur);
         this.id = id;
+        this.prenomVisiteur = prenomVisiteur;
         this.typeBillet = typeBillet;
         this.prix = prix;
         this.dateEntree = dateEntree;
@@ -39,13 +47,20 @@ public class EntreeParc extends Personne {
         this.id = id;
     }
 
-    // Méthodes pour compatibilité avec le code de ton collègue
     public String getNomVisiteur() {
         return this.nom;
     }
 
     public void setNomVisiteur(String nomVisiteur) {
         this.nom = nomVisiteur;
+    }
+
+    public String getPrenomVisiteur() {
+        return prenomVisiteur;
+    }
+
+    public void setPrenomVisiteur(String prenomVisiteur) {
+        this.prenomVisiteur = prenomVisiteur;
     }
 
     public String getTypeBillet() {

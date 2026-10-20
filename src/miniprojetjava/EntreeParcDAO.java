@@ -8,7 +8,8 @@ public class EntreeParcDAO {
 
     public List<EntreeParc> getAll() {
         List<EntreeParc> liste = new ArrayList<>();
-        String sql = "SELECT id, nom_visiteur, type_billet, prix, date_entree FROM entree_parc";
+        // Ajout de prenom_visiteur dans la requête SELECT
+        String sql = "SELECT id, nom_visiteur, prenom_visiteur, type_pass, prix FROM entree_parc";
 
         try (Connection con = ConnexionBDD.getConnection();
              PreparedStatement pst = con.prepareStatement(sql);
@@ -18,9 +19,10 @@ public class EntreeParcDAO {
                 EntreeParc ep = new EntreeParc(
                         rs.getInt("id"),
                         rs.getString("nom_visiteur"),
-                        rs.getString("type_billet"),
+                        rs.getString("prenom_visiteur"), // Récupère le prénom
+                        rs.getString("type_pass"),
                         rs.getDouble("prix"),
-                        rs.getTimestamp("date_entree")
+                        null
                 );
                 liste.add(ep);
             }
@@ -31,13 +33,18 @@ public class EntreeParcDAO {
     }
 
     public boolean ajouter(EntreeParc ep) {
-        String sql = "INSERT INTO entree_parc (nom_visiteur, type_billet, prix, date_entree) VALUES (?, ?, ?, NOW())";
+        String sql = "INSERT INTO entree_parc (nom_visiteur, prenom_visiteur, type_pass, zone_attraction, prix) VALUES (?, ?, ?, ?, ?)";
         try (Connection con = ConnexionBDD.getConnection();
              PreparedStatement pst = con.prepareStatement(sql)) {
 
             pst.setString(1, ep.getNomVisiteur());
-            pst.setString(2, ep.getTypeBillet());
-            pst.setDouble(3, ep.getPrix());
+            // Utilise le prénom s'il existe, sinon met "Visiteur" par défaut
+            String prenom = (ep.getPrenomVisiteur() != null && !ep.getPrenomVisiteur().trim().isEmpty()) 
+                            ? ep.getPrenomVisiteur() : "Visiteur";
+            pst.setString(2, prenom);
+            pst.setString(3, ep.getTypeBillet());
+            pst.setString(4, "Zone Principale");
+            pst.setDouble(5, ep.getPrix());
 
             return pst.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -47,14 +54,15 @@ public class EntreeParcDAO {
     }
 
     public boolean modifier(EntreeParc ep) {
-        String sql = "UPDATE entree_parc SET nom_visiteur = ?, type_billet = ?, prix = ? WHERE id = ?";
+        String sql = "UPDATE entree_parc SET nom_visiteur = ?, prenom_visiteur = ?, type_pass = ?, prix = ? WHERE id = ?";
         try (Connection con = ConnexionBDD.getConnection();
              PreparedStatement pst = con.prepareStatement(sql)) {
 
             pst.setString(1, ep.getNomVisiteur());
-            pst.setString(2, ep.getTypeBillet());
-            pst.setDouble(3, ep.getPrix());
-            pst.setInt(4, ep.getId());
+            pst.setString(2, ep.getPrenomVisiteur() != null ? ep.getPrenomVisiteur() : "Visiteur");
+            pst.setString(3, ep.getTypeBillet());
+            pst.setDouble(4, ep.getPrix());
+            pst.setInt(5, ep.getId());
 
             return pst.executeUpdate() > 0;
         } catch (SQLException e) {
