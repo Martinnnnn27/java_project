@@ -19,6 +19,7 @@ public class FenettreConnexion extends javax.swing.JFrame {
      * Creates new form FenettreConnexion
      */
     public FenettreConnexion() {
+        // Construit les champs, le bouton et la mise en page de la fenêtre.
         initComponents();
     }
 
@@ -106,28 +107,31 @@ public class FenettreConnexion extends javax.swing.JFrame {
     }//GEN-LAST:event_txtLoginActionPerformed
 
     private void btnConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnexionActionPerformed
-        // TODO add your handling code here:
-                                                    
+        // Récupère les valeurs saisies dans les champs de connexion.
         String login = txtLogin.getText();
         
         // Utilisation de .getPassword() qui est propre à JPasswordField
         String mdp = new String(txtPassword.getPassword());
 
+        // Interrompt la connexion si l'un des champs requis est vide.
         if (login.isEmpty() || mdp.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs.");
             return;
         }
 
+        // Délègue la vérification des identifiants à la couche d'accès aux données.
         UtilisateurDAO dao = new UtilisateurDAO();
         boolean valide = dao.authentifier(login, mdp);
 
         if (valide) {
             javax.swing.JOptionPane.showMessageDialog(this, "Connexion réussie !");
             
+            // Ouvre l'application principale puis ferme la fenêtre de connexion.
             FenettrePrincipale fp = new FenettrePrincipale();
             fp.setVisible(true);
             this.dispose();
         } else {
+            // Informe l'utilisateur lorsque le couple login/mot de passe ne correspond pas.
             javax.swing.JOptionPane.showMessageDialog(this, "Identifiants incorrects.", "Erreur", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     
@@ -138,6 +142,7 @@ public class FenettreConnexion extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        // Applique Nimbus si le thème est disponible avant d'afficher la fenêtre.
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -155,7 +160,7 @@ public class FenettreConnexion extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        // Crée et affiche la fenêtre sur le thread dédié aux événements Swing.
         java.awt.EventQueue.invokeLater(() -> new FenettreConnexion().setVisible(true));
     }
 
