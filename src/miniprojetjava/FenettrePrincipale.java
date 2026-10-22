@@ -113,7 +113,7 @@ public class FenettrePrincipale extends javax.swing.JFrame {
                     jLabel1.getBackground()
             );
             if (nouvelleCouleur != null) {
-                for (javax.swing.JLabel lbl : new javax.swing.JLabel[]{jLabel1, jLabel2, jLabel3, jLabel4}) {
+                for (javax.swing.JLabel lbl : new javax.swing.JLabel[]{jLabel1, jLabel2, jLabel3, jLabel4, jLabel5}) {
                     lbl.setBackground(nouvelleCouleur);
                 }
             }
